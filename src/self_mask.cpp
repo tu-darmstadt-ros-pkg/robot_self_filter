@@ -40,6 +40,8 @@
 
 #include <tf_conversions/tf_eigen.h>
 
+#include <inttypes.h>
+
 #if defined(IS_ASSIMP3)
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
@@ -225,7 +227,10 @@ void robot_self_filter::SelfMask::maskContainment(const pcl::PointCloud<pcl::Poi
     std::fill(mask.begin(), mask.end(), (int)OUTSIDE);
   else
   {
-      assumeFrame(data_in.header.frame_id,ros::Time(data_in.header.stamp));
+
+    ros::Time time;
+    time.fromNSec(data_in.header.stamp*1e3);
+      assumeFrame(data_in.header.frame_id,time);
     maskAuxContainment(data_in, mask);
   }
 }
@@ -239,7 +244,11 @@ void robot_self_filter::SelfMask::maskIntersection(const pcl::PointCloud<pcl::Po
   }
   else
   {
-      assumeFrame(data_in.header.frame_id, ros::Time(data_in.header.stamp), sensor_frame, min_sensor_dist);
+      ros::Time time;
+      time.fromNSec(data_in.header.stamp*1e3);
+      ROS_INFO("time ts: %d data_in ts: %d", time.toNSec(), data_in.header.stamp);
+
+      assumeFrame(data_in.header.frame_id, time, sensor_frame, min_sensor_dist);
     if (sensor_frame.empty())
         maskAuxContainment(data_in, mask);
     else
@@ -255,7 +264,9 @@ void robot_self_filter::SelfMask::maskIntersection(const pcl::PointCloud<pcl::Po
     std::fill(mask.begin(), mask.end(), (int)OUTSIDE);
   else
   {
-      assumeFrame(data_in.header.frame_id, ros::Time(data_in.header.stamp), sensor_pos, min_sensor_dist);
+    ros::Time time;
+    time.fromNSec(data_in.header.stamp*1e3);
+      assumeFrame(data_in.header.frame_id, time, sensor_pos, min_sensor_dist);
     maskAuxIntersection(data_in, mask, callback);
   }
 }

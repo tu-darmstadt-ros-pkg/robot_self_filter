@@ -95,6 +95,9 @@ class SelfFilter
       pcl::PointCloud<pcl::PointXYZ> cloud, cloud_filtered;
       pcl::fromROSMsg (*cloud2, cloud);
 
+      //Commenting in the below debug output makes it work, wtf?
+      //ROS_INFO("cloud2 ts: %d cloud ts: %d", cloud2->header.stamp.toNSec(), cloud.header.stamp);
+
       if (subsample_param_ != 0)
       {
         pcl::PointCloud<pcl::PointXYZ> cloud_downsampled;
