@@ -227,10 +227,10 @@ void robot_self_filter::SelfMask::maskContainment(const pcl::PointCloud<pcl::Poi
     std::fill(mask.begin(), mask.end(), (int)OUTSIDE);
   else
   {
-
     ros::Time time;
     time.fromNSec(data_in.header.stamp*1e3);
-      assumeFrame(data_in.header.frame_id,time);
+
+    assumeFrame(data_in.header.frame_id,time);
     maskAuxContainment(data_in, mask);
   }
 }
@@ -246,7 +246,6 @@ void robot_self_filter::SelfMask::maskIntersection(const pcl::PointCloud<pcl::Po
   {
       ros::Time time;
       time.fromNSec(data_in.header.stamp*1e3);
-      ROS_INFO("time ts: %d data_in ts: %d", time.toNSec(), data_in.header.stamp);
 
       assumeFrame(data_in.header.frame_id, time, sensor_frame, min_sensor_dist);
     if (sensor_frame.empty())
@@ -266,7 +265,8 @@ void robot_self_filter::SelfMask::maskIntersection(const pcl::PointCloud<pcl::Po
   {
     ros::Time time;
     time.fromNSec(data_in.header.stamp*1e3);
-      assumeFrame(data_in.header.frame_id, time, sensor_pos, min_sensor_dist);
+
+    assumeFrame(data_in.header.frame_id, time, sensor_pos, min_sensor_dist);
     maskAuxIntersection(data_in, mask, callback);
   }
 }
