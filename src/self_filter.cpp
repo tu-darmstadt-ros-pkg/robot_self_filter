@@ -92,30 +92,30 @@ class SelfFilter
       std::vector<int> mask;
       ros::WallTime tm = ros::WallTime::now ();
 
-      pcl::PointCloud<pcl::PointXYZ> cloud, cloud_filtered;
-      pcl::fromROSMsg (*cloud2, cloud);
+      pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>), cloud_filtered(new pcl::PointCloud<pcl::PointXYZ>);
+      pcl::fromROSMsg (*cloud2, *cloud);
 
       if (subsample_param_ != 0)
       {
         pcl::PointCloud<pcl::PointXYZ> cloud_downsampled;
         // Set up the downsampling filter
         grid_.setLeafSize (subsample_param_, subsample_param_, subsample_param_);     // 1cm leaf size
-        grid_.setInputCloud (boost::make_shared <pcl::PointCloud<pcl::PointXYZ> > (cloud));
+        grid_.setInputCloud (cloud);
         grid_.filter (cloud_downsampled);
 
-        self_filter_->updateWithSensorFrame (cloud_downsampled, cloud_filtered, sensor_frame_);
+        self_filter_->updateWithSensorFrame (cloud_downsampled, *cloud_filtered, sensor_frame_);
       } 
       else 
       {
-        self_filter_->updateWithSensorFrame (cloud, cloud_filtered, sensor_frame_);
+        self_filter_->updateWithSensorFrame (*cloud, *cloud_filtered, sensor_frame_);
       }      
 
       double sec = (ros::WallTime::now() - tm).toSec ();
 
-      ROS_DEBUG ("Self filter: reduced %d points to %d points in %f seconds", (int)cloud.points.size(), (int)cloud_filtered.points.size (), sec);
+      ROS_DEBUG ("Self filter: reduced %d points to %d points in %f seconds", (int)cloud->points.size(), (int)cloud_filtered->points.size (), sec);
 
-      sensor_msgs::PointCloud2 out;
-      pcl::toROSMsg (cloud_filtered, out);
+      pcl::PCLPointCloud2 out;
+      pcl::toPCLPointCloud2(*cloud_filtered, out);
       pointCloudPublisher_.publish (out);
     }
 
