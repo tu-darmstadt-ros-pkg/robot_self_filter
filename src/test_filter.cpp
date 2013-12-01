@@ -101,7 +101,7 @@ public:
 
   void run(void)
   {
-	  pcl::PointCloud<pcl::PointXYZ> in;
+    pcl::PointCloud<pcl::PointXYZI> in;
 	
 	  in.header.stamp = ros::Time::now().toNSec();
 	in.header.frame_id = "base_link";

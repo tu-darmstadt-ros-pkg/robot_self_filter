@@ -49,7 +49,7 @@ class SelfFilter
     {
       nh_.param<std::string> ("sensor_frame", sensor_frame_, std::string ());
       nh_.param<double> ("subsample_value", subsample_param_, 0.01);
-      self_filter_ = new filters::SelfFilter<pcl::PointCloud<pcl::PointXYZ> > (nh_);
+      self_filter_ = new filters::SelfFilter<pcl::PointCloud<pcl::PointXYZI> > (nh_);
 
       sub_ = new message_filters::Subscriber<sensor_msgs::PointCloud2> (root_handle_, "cloud_in", 10);	
       mn_ = new tf::MessageFilter<sensor_msgs::PointCloud2> (*sub_, tf_, "", 30);
@@ -92,12 +92,12 @@ class SelfFilter
       std::vector<int> mask;
       ros::WallTime tm = ros::WallTime::now ();
 
-      pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>), cloud_filtered(new pcl::PointCloud<pcl::PointXYZ>);
+      pcl::PointCloud<pcl::PointXYZI>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZI>), cloud_filtered(new pcl::PointCloud<pcl::PointXYZI>);
       pcl::fromROSMsg (*cloud2, *cloud);
 
       if (subsample_param_ != 0)
       {
-        pcl::PointCloud<pcl::PointXYZ> cloud_downsampled;
+        pcl::PointCloud<pcl::PointXYZI> cloud_downsampled;
         // Set up the downsampling filter
         grid_.setLeafSize (subsample_param_, subsample_param_, subsample_param_);     // 1cm leaf size
         grid_.setInputCloud (cloud);
@@ -126,14 +126,14 @@ class SelfFilter
     tf::MessageFilter<sensor_msgs::PointCloud2>           *mn_;
     message_filters::Subscriber<sensor_msgs::PointCloud2> *sub_;
 
-    filters::SelfFilter<pcl::PointCloud<pcl::PointXYZ> > *self_filter_;
+    filters::SelfFilter<pcl::PointCloud<pcl::PointXYZI> > *self_filter_;
     std::string sensor_frame_;
     double subsample_param_;
 
     ros::Publisher                                        pointCloudPublisher_;
     ros::Subscriber                                       no_filter_sub_;
 
-    pcl::VoxelGrid<pcl::PointXYZ>                         grid_;
+    pcl::VoxelGrid<pcl::PointXYZI>                         grid_;
 };
 
 int 

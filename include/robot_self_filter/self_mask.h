@@ -101,7 +101,7 @@ namespace robot_self_filter
         /** \brief Compute the containment mask (INSIDE or OUTSIDE) for a given pointcloud. If a mask element is INSIDE, the point
             is inside the robot. The point is outside if the mask element is OUTSIDE.
          */
-        void maskContainment (const pcl::PointCloud<pcl::PointXYZ>& data_in, std::vector<int> &mask);
+        void maskContainment (const pcl::PointCloud<pcl::PointXYZI>& data_in, std::vector<int> &mask);
 
         /** \brief Compute the intersection mask for a given
             pointcloud. If a mask element can have one of the values
@@ -112,7 +112,7 @@ namespace robot_self_filter
             the origin of the sensor. A callback can be registered for
             the first intersection point on each body.
          */
-        void maskIntersection (const pcl::PointCloud<pcl::PointXYZ>& data_in, const std::string &sensor_frame, const double min_sensor_dist,
+        void maskIntersection (const pcl::PointCloud<pcl::PointXYZI>& data_in, const std::string &sensor_frame, const double min_sensor_dist,
                   std::vector<int> &mask, const boost::function<void(const Eigen::Vector3d&)> &intersectionCallback = NULL);
 
         /** \brief Compute the intersection mask for a given pointcloud. If a mask
@@ -121,7 +121,7 @@ namespace robot_self_filter
             been seen. If the mask element is INSIDE, the point is inside
             the robot. The origin of the sensor is specified as well.
          */
-        void maskIntersection (const pcl::PointCloud<pcl::PointXYZ>& data_in, const Eigen::Vector3d &sensor, const double min_sensor_dist,
+        void maskIntersection (const pcl::PointCloud<pcl::PointXYZI>& data_in, const Eigen::Vector3d &sensor, const double min_sensor_dist,
                   std::vector<int> &mask, const boost::function<void(const Eigen::Vector3d&)> &intersectionCallback = NULL);
         
         /** \brief Assume subsequent calls to getMaskX() will be in the frame passed to this function.
@@ -168,10 +168,10 @@ namespace robot_self_filter
         void computeBoundingSpheres (void);
         
         /** \brief Perform the actual mask computation. */
-        void maskAuxContainment (const pcl::PointCloud<pcl::PointXYZ>& data_in, std::vector<int> &mask);
+        void maskAuxContainment (const pcl::PointCloud<pcl::PointXYZI>& data_in, std::vector<int> &mask);
 
         /** \brief Perform the actual mask computation. */
-        void maskAuxIntersection (const pcl::PointCloud<pcl::PointXYZ>& data_in, std::vector<int> &mask, const boost::function<void(const Eigen::Vector3d&)> &callback);
+        void maskAuxIntersection (const pcl::PointCloud<pcl::PointXYZI>& data_in, std::vector<int> &mask, const boost::function<void(const Eigen::Vector3d&)> &callback);
         
         tf::TransformListener               &tf_;
         ros::NodeHandle                     nh_;

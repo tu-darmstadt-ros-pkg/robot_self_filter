@@ -143,7 +143,7 @@ namespace filters
       }
 
       bool updateWithSensorFrame
-        (const pcl::PointCloud<pcl::PointXYZ>& data_in, pcl::PointCloud<pcl::PointXYZ>& data_out, const std::string& sensor_frame)
+        (const T& data_in, T& data_out, const std::string& sensor_frame)
       {
         sensor_frame_ = sensor_frame;
         return (update (data_in, data_out));
@@ -154,7 +154,7 @@ namespace filters
        * \param data_out T array with length width
        */
       virtual bool 
-        update (const pcl::PointCloud<pcl::PointXYZ>& data_in, pcl::PointCloud<pcl::PointXYZ>& data_out)
+        update (const T& data_in, T& data_out)
       {
         std::vector<int> keep (data_in.points.size ());
         if (sensor_frame_.empty ()) 
@@ -169,7 +169,7 @@ namespace filters
         return (true);
       }
 
-      bool updateWithSensorFrame (const pcl::PointCloud<pcl::PointXYZ>& data_in, pcl::PointCloud<pcl::PointXYZ>& data_out, pcl::PointCloud<pcl::PointXYZ>& data_diff, const std::string& sensor_frame)
+      bool updateWithSensorFrame (const T& data_in, T& data_out, T& data_diff, const std::string& sensor_frame)
       {
         sensor_frame_ = sensor_frame;
         return (update (data_in, data_out, data_diff));
@@ -179,7 +179,7 @@ namespace filters
        * \param data_in T array with length width
        * \param data_out T array with length width
        */
-      virtual bool update (const pcl::PointCloud<pcl::PointXYZ>& data_in, pcl::PointCloud<pcl::PointXYZ>& data_out, pcl::PointCloud<pcl::PointXYZ>& data_diff)
+      virtual bool update (const T& data_in, T& data_out, T& data_diff)
       {
         std::vector<int> keep (data_in.points.size ());
         if (sensor_frame_.empty ()) 
@@ -195,7 +195,7 @@ namespace filters
         return (true);
       }
 
-      void fillDiff (const pcl::PointCloud<pcl::PointXYZ>& data_in, const std::vector<int> &keep, pcl::PointCloud<pcl::PointXYZ>& data_out)
+      void fillDiff (const T& data_in, const std::vector<int> &keep, T& data_out)
       {
         const unsigned int np = data_in.points.size ();
       
@@ -224,7 +224,7 @@ namespace filters
         }
       }
 
-      void fillResult (const pcl::PointCloud<pcl::PointXYZ>& data_in, const std::vector<int> &keep, pcl::PointCloud<pcl::PointXYZ>& data_out)
+      void fillResult (const T& data_in, const std::vector<int> &keep, T& data_out)
       {
         const unsigned int np = data_in.points.size ();
 
