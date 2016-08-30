@@ -9,16 +9,20 @@ include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 #  MinSizeRel     : w/o debug symbols, w/ optimization, stripped binaries
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
+set(ROS_BUILD_TYPE Release)
+
+rosbuild_init()
+
+rosbuild_add_boost_directories()
+
 find_package(Eigen REQUIRED)
 find_package(PCL REQUIRED)
+
 include_directories(SYSTEM ${EIGEN_INCLUDE_DIRS}
                            ${PCL_INCLUDE_DIRS}
 )
 
-set(ROS_BUILD_TYPE Release)
-
-find_package(PCL)
-include_directories(SYSTEM ${PCL_INCLUDE_DIRS})
 find_package(PkgConfig REQUIRED)
 find_package(ASSIMP QUIET)
 if (NOT ASSIMP_FOUND)
@@ -44,10 +48,6 @@ else()
   set(ASSIMP_INCLUDE_DIRS)
   set(IS_ASSIMP3 0) # most likely not
 endif()
-
-rosbuild_init()
-
-rosbuild_add_boost_directories()
 
 rosbuild_add_library(robot_self_filter src/self_mask.cpp)
 rosbuild_add_openmp_flags(robot_self_filter)
